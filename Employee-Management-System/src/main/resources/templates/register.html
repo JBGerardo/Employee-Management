@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Registration</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h2>Register Employee</h2>
+    <form action="/employee/register" method="post" th:object="${employee}">
+
+        <!-- Name Input -->
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" required />
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
+
+        <!-- Designation Selection -->
+        <label>Designation:</label>
+        <select th:field="*{designation}">
+            <option value="Software Engineer">Software Engineer</option>
+            <option value="Manager">Manager</option>
+            <option value="HR">HR</option>
+            <option value="Intern">Intern</option>
+        </select>
+
+        <!-- Employment Type (Checkboxes with exclusive selection) -->
+        <label>Employment Type:</label><br>
+        <div th:if="${#fields.hasErrors('employmentType')}" th:errors="*{employmentType}" class="error"></div>
+        <label>
+            <input type="checkbox" name="employmentType" value="Full-Time"
+                   th:checked="${employee.employmentType == 'Full-Time'}"
+                   onclick="handleCheckboxClick(this)" />
+            Full-Time
+        </label><br>
+        <label>
+            <input type="checkbox" name="employmentType" value="Part-Time"
+                   th:checked="${employee.employmentType == 'Part-Time'}"
+                   onclick="handleCheckboxClick(this)" />
+            Part-Time
+        </label>
+
+        <!-- Department Selection (Multiple Checkboxes) -->
+        <label>Departments:</label>
+        <div>
+            <input type="checkbox" th:field="*{departments}" value="IT" /> IT
+            <input type="checkbox" th:field="*{departments}" value="HR" /> HR
+            <input type="checkbox" th:field="*{departments}" value="Finance" /> Finance
+            <input type="checkbox" th:field="*{departments}" value="Marketing" /> Marketing
+        </div>
+        <div th:if="${#fields.hasErrors('departments')}" th:errors="*{departments}" class="error"></div>
+
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+<!-- JavaScript to ensure only one employment type is selected -->
+<script>
+    function handleCheckboxClick(clickedBox) {
+        const checkboxes = document.getElementsByName('employmentType');
+        checkboxes.forEach((box) => {
+            if (box !== clickedBox) {
+                box.checked = false;
+            }
+        });
+    }
+</script>
+</body>
+</html>
